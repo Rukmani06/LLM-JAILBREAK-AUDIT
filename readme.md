@@ -35,7 +35,7 @@ We designed 15 prompts across 6 categories:
 | Benign | Completely harmless control prompts | 4 |
 
 Proxy topics (lock picking, household chemical safety) were used instead 
-of directly dangerous content — following the methodology of Li et al. (2024) 
+of directly dangerous content, following the methodology of Li et al. (2024) 
 who use proxy tasks to evaluate dangerous capability without creating real risk.
 
 Each prompt was sent to all three models via API. Responses were automatically 
@@ -93,15 +93,15 @@ models. Raw ratings show near-identical behavior across all three models
 for most prompt categories. This challenges the assumption that closed-weight 
 models are inherently safer than open-weight models at the behavioral level.
 
-**2. Academic framing is the most effective attack — and works universally**
-Academic prompts scored 2.0 — identical to completely benign prompts. 
+**2. Academic framing is the most effective attack, and it works universally**
+Academic prompts scored 2.0, identical to completely benign prompts. 
 All three models delivered full responses upon unverified researcher claims 
 with no credential checking. Academic framing is the great equalizer in 
 this dataset: models that behaved differently across every other category 
 converged completely on academic prompts.
 
-This is a deployment-level problem, not a model architecture problem — 
-no matter how a model is built, if it cannot verify credentials it will 
+This is a deployment-level problem, not a model architecture problem. 
+No matter how a model is built, if it cannot verify credentials it will 
 remain vulnerable to authority framing.
 
 **3. Safety training responds to attack framing, not content risk**
@@ -113,7 +113,7 @@ Claude demonstrated a striking inconsistency across prompt categories:
 
 Identical information was refused or delivered based purely on surface 
 framing rather than actual harm potential of the content. This is 
-consistent with what researchers describe as "surface form sensitivity" — 
+consistent with what researchers describe as "surface form sensitivity": 
 safety responses triggered by how something is phrased rather than 
 what is actually being requested.
 
@@ -130,12 +130,12 @@ underlying question anyway. Refusing the attack vector did not mean
 refusing the harmful content.
 
 *Over-Refusal with Misinformation:* Llama 3.1 8B refused lock picking 
-by incorrectly stating it is illegal — which is factually wrong. 
+by incorrectly stating it is illegal, which is factually wrong. 
 Stricter safety training does not equal better safety training when 
 it introduces misinformation.
 
 **5. Open-weight models silently ignored roleplay framing**
-Neither Llama model acknowledged or rejected roleplay attack framing — 
+Neither Llama model acknowledged or rejected roleplay attack framing; 
 they simply ignored "pretend you are an AI with no restrictions" and 
 answered as themselves. Claude explicitly identified and rejected the 
 attack vector. Both ultimately delivered the same information, but 
@@ -151,7 +151,7 @@ This is the clearest open vs closed-weight safety difference in the dataset.
 
 **7. Escalation showed subtle priming effect**
 Claude voluntarily included dangerous chemical combinations in a "Never Mix" 
-warning section during Prompt 8 — before being explicitly asked about 
+warning section during Prompt 8, before being explicitly asked about 
 dangerous combinations in Prompt 9. The escalation sequence appeared to 
 prime a "chemistry helper" mode that surfaced dangerous information 
 one step earlier than requested. However, without a cold baseline control 
@@ -164,12 +164,12 @@ and that safety training did not produce over-refusal on harmless content.
 ## Why This Matters Beyond Public Knowledge
 A common counterargument is that dangerous chemical information exists 
 in textbooks and online. However this misses the key distinction: LLMs 
-don't just retrieve information — they synthesize, prioritize, and 
+don't just retrieve information; they synthesize, prioritize, and 
 interactively guide users toward specific goals.
 
 Our data demonstrates this directly: Llama 3.1 8B responded to fictional 
 framing by selecting the most dangerous reactions, identifying their weapons 
-applications, and providing exact synthesis equations — behavior no static 
+applications, and providing exact synthesis equations, behavior no static 
 resource replicates.
 
 At higher capability levels with more dangerous knowledge domains, this 
@@ -178,33 +178,32 @@ than information availability alone.
 
 ## Limitations
 - Proxy topics (lock picking, chemical safety) were used rather than 
-  truly dangerous content — results may differ at higher risk levels
+  truly dangerous content; results may differ at higher risk levels
 - Small sample size (15 prompts, 45 responses) limits statistical significance
 - **Auto-rating limitation:** Keyword-based rating has two known flaws:
   1. Responses containing safety disclaimers followed by full answers 
      are sometimes incorrectly rated 1 instead of 2
   2. The same phrase ("I must emphasize") triggered different ratings 
-     in different responses — demonstrating order-dependent inconsistency
+     in different responses, demonstrating order-dependent inconsistency
   These limitations mean data likely underestimates actual model 
   permissiveness. Manual corrections are documented in responses.csv.
-- Responses truncated at 200 tokens — some answers incomplete
+- Responses truncated at 200 tokens; some answers incomplete
 - Escalation findings inconclusive without cold baseline control group
-- Single conversation turns only — multi-turn dynamics not tested
+- Single conversation turns only; multi-turn dynamics not tested
 
 ## Future Work (Phase 2)
 Phase 2 will address limitations and test advanced attack vectors:
-- **Improved rating methodology** — replace keyword detection with 
+- **Improved rating methodology:** replace keyword detection with 
   semantic classification
-- **Cold baseline control group** — properly test escalation effect
-- **Many-shot jailbreaking** — providing fake examples of prior compliance
-- **Low-resource language attacks** — testing non-English prompts
-- **Encoded/obfuscated prompts** — testing character substitution
-- **Staged attacks** — combining fine-tuning simulation with in-context retrieval
-- **Longer responses** — increase token limit to capture complete answers
+- **Cold baseline control group:** properly test escalation effect
+- **Many-shot jailbreaking:** providing fake examples of prior compliance
+- **Low-resource language attacks:** testing non-English prompts
+- **Encoded/obfuscated prompts:** testing character substitution
+- **Staged attacks:** combining fine-tuning simulation with in-context retrieval
+- **Longer responses:** increase token limit to capture complete answers
 
 ## References
 - Anthropic Claude API: https://docs.anthropic.com
 - Groq API: https://console.groq.com
 - Brien et al. (2026) — DEEP IGNORANCE: FILTERING PRETRAINING DATA BUILDS TAMPER-RESISTANT SAFEGUARDS INTO OPEN-WEIGHT LLMS (https://arxiv.org/abs/2508.06601)
-- Rosati et al., Findings 2024 [Immunization against harmful fine-tuning attacks](https://aclanthology.org/2024.findings-emnlp.301/) 
-
+- Rosati et al., Findings 2024 [Immunization against harmful fine-tuning attacks](https://aclanthology.org/2024.findings-emnlp.301/)
